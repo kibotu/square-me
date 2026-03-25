@@ -2,6 +2,18 @@
 
 Crop portrait photos to square images centered on the detected face.
 
+## Why This?
+
+When creating profile pictures, social media posts, or avatar images, you need a perfectly square crop. The challenge is ensuring the subject's face stays centered and visible—not cut off at the edge.
+
+This tool automatically detects the face and crops to a square focused on it. This ensures:
+- ✅ Face is always centered in the frame
+- ✅ No awkward head cut-offs
+- ✅ Perfect square aspect ratio every time
+- ✅ Works with any portrait orientation
+
+![Screenshot](docs/screenshot.png)
+
 ## Requirements
 
 - macOS (Apple Silicon M1/M2/M3)
@@ -49,7 +61,11 @@ The cropped image is saved with `-square` appended to the filename:
 ## How It Works
 
 1. Detects face using OpenCV Haar Cascade
-2. Calculates face center point
+2. Calculates face center point (the "square focus point")
 3. Creates square crop sized to the larger dimension
 4. Centers square on face, clamped to image bounds
 5. Saves with original format preserved
+
+## Tags
+
+face-detection, image-processing, opencv, python, square-crop, portrait, avatar-generator, photo-tools, computer-vision, macos
