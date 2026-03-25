@@ -81,7 +81,3 @@ The cropped image is saved with `-square` appended to the filename:
 3. Creates square crop sized to the larger dimension
 4. Centers square on face, clamped to image bounds
 5. Saves with original format preserved
-
-## Tags
-
-face-detection, image-processing, opencv, python, square-crop, portrait, avatar-generator, photo-tools, computer-vision, macos
