@@ -50,16 +50,12 @@ def crop_to_square(image: Image.Image, bbox: tuple[float, float, float, float]) 
     ))
 
 
-def main():
-    parser = argparse.ArgumentParser(description="Crop image to square centered on face")
-    parser.add_argument("input", type=Path, help="Input image path")
-    args = parser.parse_args()
-    
-    if not args.input.exists():
-        print(f"Error: File not found: {args.input}", file=sys.stderr)
-        sys.exit(1)
-    
-    image = Image.open(args.input)
+SUPPORTED_EXTENSIONS = {".jpg", ".jpeg", ".png", ".bmp", ".webp"}
+
+
+def process_image(input_path: Path, output_dir: Path | None = None) -> bool:
+    """Process a single image. Returns True if successful."""
+    image = Image.open(input_path)
     
     if image.mode not in ("RGB", "RGBA"):
         image = image.convert("RGBA")
@@ -67,14 +63,19 @@ def main():
     bbox = get_face_bbox(image)
     
     if bbox is None:
-        print(f"Error: No face detected in {args.input}", file=sys.stderr)
-        sys.exit(1)
+        print(f"Error: No face detected in {input_path}", file=sys.stderr)
+        return False
     
     square = crop_to_square(image, bbox)
     
-    stem = args.input.stem
-    ext = args.input.suffix
-    output = args.input.parent / f"{stem}-square{ext}"
+    stem = input_path.stem
+    ext = input_path.suffix
+    
+    if output_dir:
+        output_dir.mkdir(parents=True, exist_ok=True)
+        output = output_dir / f"{stem}-square{ext}"
+    else:
+        output = input_path.parent / f"{stem}-square{ext}"
     
     if ext.lower() in (".jpg", ".jpeg"):
         square.save(output, "JPEG", quality=95)
@@ -84,6 +85,46 @@ def main():
         square.save(output)
     
     print(f"Saved: {output}")
+    return True
+
+
+def process_folder(folder: Path, output_dir: Path | None = None) -> int:
+    """Process all images in a folder. Returns number of successfully processed images."""
+    image_files = [f for f in folder.iterdir() if f.suffix.lower() in SUPPORTED_EXTENSIONS]
+    
+    if not image_files:
+        print(f"No supported images found in {folder}", file=sys.stderr)
+        return 0
+    
+    success_count = 0
+    for image_file in image_files:
+        if process_image(image_file, output_dir):
+            success_count += 1
+    
+    print(f"Processed {success_count}/{len(image_files)} images successfully")
+    return success_count
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Crop image to square centered on face")
+    parser.add_argument("input", type=Path, nargs="?", help="Input image path")
+    parser.add_argument("--folder", "-f", type=Path, help="Input folder to process in batch mode")
+    parser.add_argument("--output", "-o", type=Path, help="Output directory (for batch mode)")
+    args = parser.parse_args()
+    
+    if args.folder:
+        if not args.folder.exists() or not args.folder.is_dir():
+            print(f"Error: Folder not found: {args.folder}", file=sys.stderr)
+            sys.exit(1)
+        process_folder(args.folder, args.output)
+    elif args.input:
+        if not args.input.exists():
+            print(f"Error: File not found: {args.input}", file=sys.stderr)
+            sys.exit(1)
+        process_image(args.input)
+    else:
+        parser.print_help()
+        sys.exit(1)
 
 
 if __name__ == "__main__":

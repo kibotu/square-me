@@ -36,12 +36,28 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 ./run.sh <input_image>
 ```
 
-### Examples
+### Single Image
 
 ```bash
 ./run.sh photo.jpg
 ./run.sh portrait.png
 ./run.sh ~/Pictures/selfie.jpeg
+```
+
+### Batch Mode (Folder)
+
+Process all images in a folder:
+
+```bash
+./run.sh --folder ./photos
+./run.sh -f ./photos
+```
+
+With custom output directory:
+
+```bash
+./run.sh --folder ./photos --output ./cropped
+./run.sh -f ./photos -o ./cropped
 ```
 
 ### Output
