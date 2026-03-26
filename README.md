@@ -49,15 +49,13 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 Process all images in a folder:
 
 ```bash
-./run.sh --folder ./photos
-./run.sh -f ./photos
+./run.sh ./photos
 ```
 
 With custom output directory:
 
 ```bash
-./run.sh --folder ./photos --output ./cropped
-./run.sh -f ./photos -o ./cropped
+./run.sh ./photos ./cropped
 ```
 
 ### Output
