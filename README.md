@@ -79,3 +79,7 @@ The cropped image is saved with `-square` appended to the filename:
 3. Creates square crop sized to the larger dimension
 4. Centers square on face, clamped to image bounds
 5. Saves with original format preserved
+
+## Support
+If this saved you a few hours (or a few `if` statements), consider buying me a coffee. ☕
+<a href="https://www.buymeacoffee.com/" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" height="45" width="160"></a>
